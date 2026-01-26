@@ -1,0 +1,139 @@
+Note untuk deployment dan development
+
+
+=================================================
+INSTALL DEPENDENCIES
+
+npm install zod
+npm install react-router-dom
+npm install -D @types/node
+npm install typescript
+npm install cors
+npm install -D @types/cors
+npm install bcrypt
+npm install -D @types/bcrypt
+npm install prom-client
+
+BUILD
+npm run build
+npm run preview
+
+VSCODE ext
+Tailwind CSS IntelliSense
+
+=================================================
+DOCKERFILE
+
+dev
+
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host"]
+
+-------------------------------------------------
+
+prod
+
+# Build Stage
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+ARG MODE=production
+ENV MODE=${MODE}
+RUN npm run build -- --mode ${MODE}
+
+# Runtime Stage
+FROM nginx:alpine
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+=================================================
+ENV
+prod
+VITE_API_URL=https://apifinote.rakafitrap.com
+VITE_AUTH_MODE=prod
+
+=================================================
+Build Image
+
+development mode
+
+docker build \
+  --build-arg MODE=development \
+  -t finote-frontend-dev .
+
+docker build --build-arg MODE=development -t finote-frontend-dev .
+-------------------------------------------------
+
+Docker run
+
+#jalan dev (langsung hapus dan pakai terminal)
+docker run -it --rm -p 8082:80 --name finote-frontend-dev finote-frontend-dev
+
+#jalan background
+docker run -d --name finote-frontend-dev -p 8082:80 finote-frontend-dev
+
+
+-----------------------------------------------
+Prod mode
+
+docker build \
+  --build-arg MODE=production \
+  -t finote-frontend-prod .
+
+docker build --build-arg MODE=production -t finote-frontend-prod .
+
+docker run -d \
+  --name finote-frontend-prod \
+  -p 8082:80 \
+  --restart=unless-stopped \
+  finote-frontend-prod
+
+
+docker run -d --name finote-frontend-prod --restart=unless-stopped -p 8082:80 finote-frontend-prod
+
+
+//Rebuild saat ada change code
+
+docker stop finote-frontend-prod
+docker rm finote-frontend-prod
+
+docker build --build-arg MODE=production -t finote-frontend-prod .
+
+docker run -d \
+  --name finote-frontend-prod \
+  -p 8082:80 \
+  finote-frontend-prod
+
+=================================================
+overide NODE_ENV
+
+#DEV MODE
+linux
+VITE_AUTH_MODE=dev VITE_API_URL=http://localhost:3000 npm run build
+docker build -t finote-frontend .
+
+#PROD MODE
+linux
+VITE_AUTH_MODE=prod VITE_API_URL=https://api.finote.domainmu.com npm run build
+docker build -t finote-frontend .
+=================================================
+Error
+
+Cari alias/import bermasalah
+
+powershell/cmd
+Select-String -Path src\**\*.ts,src\**\*.tsx -Pattern "@shared"
+findstr /s /i "@shared" src\*.ts src\*.tsx
+
+linux
+grep -R "@shared" src

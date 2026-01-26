@@ -1,0 +1,155 @@
+/* 
+  Fonts are loaded via index.html:
+  - Outfit
+  - DM Sans
+  - Architects Daughter
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+
+  /* Primary */
+  --primary: 250 85% 65%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+
+  --accent: 35 100% 92%;
+  --accent-foreground: 222 47% 11%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 250 85% 65%;
+
+  --radius: 0.75rem;
+
+  /* Fonts */
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-handwriting: "Architects Daughter", cursive;
+
+  /* Note Colors */
+  --note-white: 0 0% 100%;
+  --note-red: 0 100% 96%;
+  --note-orange: 30 100% 96%;
+  --note-yellow: 50 100% 96%;
+  --note-green: 140 80% 96%;
+  --note-teal: 170 80% 96%;
+  --note-blue: 210 100% 96%;
+  --note-purple: 260 100% 97%;
+  --note-pink: 330 100% 96%;
+  --note-brown: 30 30% 96%;
+  --note-gray: 220 15% 96%;
+}
+
+.dark {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+
+  --secondary: 217 33% 17%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+
+  --accent: 217 33% 17%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+
+  /* Dark note colors */
+  --note-white: 222 47% 13%;
+  --note-red: 0 30% 20%;
+  --note-orange: 30 30% 20%;
+  --note-yellow: 50 30% 20%;
+  --note-green: 140 30% 20%;
+  --note-teal: 170 30% 20%;
+  --note-blue: 210 30% 20%;
+  --note-purple: 260 30% 20%;
+  --note-pink: 330 30% 20%;
+  --note-brown: 30 15% 20%;
+  --note-gray: 220 10% 20%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .font-handwriting {
+    font-family: var(--font-handwriting);
+  }
+
+  /* Smooth scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full;
+  }
+}
+
+/* Animations */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}

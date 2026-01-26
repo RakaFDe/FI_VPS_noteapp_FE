@@ -1,0 +1,56 @@
+import { createContext, useContext, useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
+import { me, login, logout } from "@/hooks/use-auth";
+import type { User } from "@/types/user";
+
+type User = {
+  id: number;
+  username: string;
+};
+
+type AuthContextType = {
+  user: User | null;
+  loading: boolean;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+};
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // 🔹 cek session saat app load
+  useEffect(() => {
+    apiFetch<User>(api.auth.me.path)
+      .then(setUser)
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function login(username: string, password: string) {
+    const user = await apiFetch<User>(api.auth.login.path, {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    });
+    setUser(user);
+  }
+
+  async function logout() {
+    await apiFetch(api.auth.logout.path, { method: "POST" });
+    setUser(null);
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
+  return ctx;
+}

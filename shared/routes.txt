@@ -1,0 +1,65 @@
+// frontend/shared/routes.ts
+import { z } from "zod";
+import { insertUserSchema, insertNoteSchema, users, notes } from "./schema";
+
+export const api = {
+  auth: {
+    register: {
+      method: "POST" as const,
+      path: "/api/auth/register",
+      input: insertUserSchema,
+      responses: {
+        201: z.custom<typeof users.$inferSelect>(),
+      },
+    },
+
+    login: {
+      method: "POST" as const,
+      path: "/api/auth/login",
+      input: z.object({
+        username: z.string(),
+        password: z.string(),
+      }),
+      responses: {
+        200: z.custom<typeof users.$inferSelect>(),
+        401: z.object({ error: z.string() }),
+      },
+    },
+
+    logout: {
+      method: "POST" as const,
+      path: "/api/auth/logout",
+      responses: {
+        200: z.object({ success: z.boolean() }),
+      },
+    },
+
+    me: {
+      method: "GET" as const,
+      path: "/api/auth/me",
+      responses: {
+        200: z.custom<typeof users.$inferSelect>(),
+        401: z.object({ error: z.string() }),
+      },
+    },
+  },
+
+  notes: {
+    list: {
+      method: "GET" as const,
+      path: "/api/notes",
+      responses: {
+        200: z.array(z.custom<typeof notes.$inferSelect>()),
+      },
+    },
+
+    create: {
+      method: "POST" as const,
+      path: "/api/notes",
+      input: insertNoteSchema,
+      responses: {
+        201: z.custom<typeof notes.$inferSelect>(),
+      },
+    },
+  },
+};

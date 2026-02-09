@@ -5,14 +5,17 @@ Note untuk deployment dan development
 INSTALL DEPENDENCIES
 
 npm install zod
-npm install react-router-dom
-npm install -D @types/node
-npm install typescript
+npm install react-router-dom@latest
+npm install -D @types/node@latest
+npm install typescript@latest
 npm install cors
 npm install -D @types/cors
 npm install bcrypt
 npm install -D @types/bcrypt
 npm install prom-client
+npm install lucide-react@latest
+npm install tailwind-merge@latest
+npm install -D @vitejs/plugin-react@latest
 
 BUILD
 npm run build

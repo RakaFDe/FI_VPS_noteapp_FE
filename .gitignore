@@ -21,3 +21,6 @@ Thumbs.db
 # editor
 .vscode/
 .idea/
+
+#note
+err_note.txt

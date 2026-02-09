@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
+
 // Reuse schema from backend but local zod version for sync validation if needed
 const authSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),

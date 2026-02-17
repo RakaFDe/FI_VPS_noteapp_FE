@@ -12,8 +12,14 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Mode build Vite
+# env
 ARG VITE_MODE=production
+ARG VITE_API_URL
+ARG VITE_AUTH_MODE
+
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_AUTH_MODE=$VITE_AUTH_MODE
+
 
 # Build static assets
 RUN npm run build -- --mode ${VITE_MODE}

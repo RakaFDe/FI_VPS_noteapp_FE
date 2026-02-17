@@ -70,20 +70,19 @@ Build Image
 
 development mode
 
-docker build \
-  --build-arg MODE=development \
-  -t finote-frontend-dev .
 
-docker build --build-arg MODE=development -t finote-frontend-dev .
+docker build --build-arg VITE_MODE=development --build-arg VITE_AUTH_MODE=dev -t finote-frontend-dev .
+docker build --build-arg VITE_MODE=development -t finote-frontend-dev .
+
 -------------------------------------------------
 
 Docker run
 
 #jalan dev (langsung hapus dan pakai terminal)
-docker run -it --rm -p 8082:80 --name finote-frontend-dev finote-frontend-dev
+docker run -it --rm -p 8082:8080 --name finote-frontend-dev finote-frontend-dev
 
 #jalan background
-docker run -d --name finote-frontend-dev -p 8082:80 finote-frontend-dev
+docker run -d --name finote-frontend-dev -p 8082:8080 finote-frontend-dev  
 
 
 -----------------------------------------------

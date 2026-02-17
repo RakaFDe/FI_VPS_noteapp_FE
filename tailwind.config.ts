@@ -1,4 +1,6 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
+import tailwindAnimate from "tailwindcss-animate"
+import typography from "@tailwindcss/typography"
 
 export default {
   darkMode: ["class"],
@@ -63,9 +65,9 @@ export default {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
-        display: ["'Outfit'", "sans-serif"],
-        body: ["'DM Sans'", "sans-serif"],
-        handwriting: ["'Architects Daughter'", "cursive"],
+        display: ["Outfit", "sans-serif"],
+        body: ["DM Sans", "sans-serif"],
+        handwriting: ["Architects Daughter", "cursive"],
       },
       keyframes: {
         "accordion-down": {
@@ -83,5 +85,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-} satisfies Config;
+  plugins: [tailwindAnimate, typography],
+} satisfies Config

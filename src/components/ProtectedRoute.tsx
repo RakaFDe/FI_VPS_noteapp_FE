@@ -8,12 +8,13 @@ export default function ProtectedRoute({
 }: {
   children: React.ReactNode;
 }) {
-  // DEV MODE → langsung lolos
+  // 🔹 Hook selalu dipanggil
+  const { user, isLoading } = useAuth();
+
+  // DEV MODE → bypass auth
   if (AUTH_MODE === "dev") {
     return <>{children}</>;
   }
-
-  const { user, isLoading } = useAuth();
 
   if (isLoading) {
     return (

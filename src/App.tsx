@@ -29,3 +29,4 @@ export default function App() {
 console.log("MODE:", import.meta.env.MODE);
 console.log("API:", import.meta.env.VITE_API_URL);
 console.log("AUTH MODE:", import.meta.env.VITE_AUTH_MODE);
+

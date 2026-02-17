@@ -8,8 +8,7 @@ import {
   User, 
   LogOut, 
   Moon, 
-  Sun, 
-  Menu
+  Sun
 } from "lucide-react";
 import { 
   DropdownMenu, 

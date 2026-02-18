@@ -44,7 +44,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # =========================
 # Healthcheck
 # =========================
-HEALTHCHECK --interval=30s --timeout=3s \
+HEALTHCHECK --interval=30s --timeout=5s \
   CMD wget -q -O /dev/null http://localhost:8080 || exit 1
 
 # nginx unprivileged pakai port 8080

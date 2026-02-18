@@ -38,28 +38,14 @@ jobs:
           SHORT_SHA=${GITHUB_SHA::7}
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
 
-          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
-            echo "VITE_MODE=production" >> $GITHUB_ENV
-            echo "VITE_API_URL=${{ vars.VITE_API_URL_PROD }}" >> $GITHUB_ENV
-            echo "VITE_AUTH_MODE=${{ vars.VITE_AUTH_MODE_PROD }}" >> $GITHUB_ENV
+          echo "VITE_MODE=production" >> $GITHUB_ENV
+          echo "VITE_API_URL=${{ vars.VITE_API_URL_PROD }}" >> $GITHUB_ENV
+          echo "VITE_AUTH_MODE=${{ vars.VITE_AUTH_MODE_PROD }}" >> $GITHUB_ENV
 
+          echo "IMAGE_TAGS<<EOF" >> $GITHUB_ENV
+          echo "${IMAGE_NAME}:${VERSION}-${SHORT_SHA}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
-            echo "IMAGE_TAGS<<EOF" >> $GITHUB_ENV
-            echo "${IMAGE_NAME}:latest" >> $GITHUB_ENV
-            echo "${IMAGE_NAME}:${VERSION}" >> $GITHUB_ENV
-            echo "${IMAGE_NAME}:${VERSION}-${SHORT_SHA}" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-          else
-            echo "VITE_MODE=development" >> $GITHUB_ENV
-            echo "VITE_API_URL=${{ vars.VITE_API_URL_DEV }}" >> $GITHUB_ENV
-            echo "VITE_AUTH_MODE=${{ vars.VITE_AUTH_MODE_DEV }}" >> $GITHUB_ENV
-
-
-            echo "IMAGE_TAGS<<EOF" >> $GITHUB_ENV
-            echo "${IMAGE_NAME}:dev" >> $GITHUB_ENV
-            echo "${IMAGE_NAME}:${VERSION}-dev-${SHORT_SHA}" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-          fi
 
       # Build (no push)
       - name: Build Docker image

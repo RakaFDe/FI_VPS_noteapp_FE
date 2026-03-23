@@ -65,7 +65,7 @@ jobs:
           docker run --rm \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v $HOME/.cache:/root/.cache \
-            aquasec/trivy:latest image \
+            aquasec/trivy:0.69.0 image \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
             --format table \

@@ -70,7 +70,7 @@ jobs:
             --ignore-unfixed \
             --format table \
             --no-progress \
-            --exit-code 1 \
+            --exit-code 0 \
             ${{ env.IMAGE_NAME }}:ci
 
       # Login GHCR

@@ -1,4 +1,4 @@
-name: CI - Build Scan & Push Finote Frontend Image
+name: CI - Finote Frontend Image
 
 on:
   push:
@@ -83,3 +83,17 @@ jobs:
             VITE_MODE=${{ env.VITE_MODE }}
             VITE_API_URL=${{ env.VITE_API_URL }}
             VITE_AUTH_MODE=${{ env.VITE_AUTH_MODE }}
+      
+      # update repo OPS frontend
+      - name: Update OPS repo (frontend image)
+        run: |
+          git clone https://x-access-token:${{ secrets.OPS_REPO_TOKEN }}@github.com/<username>/<ops-repo>.git
+          cd <ops-repo>/frontend
+
+          echo "FRONTEND_IMAGE=${IMAGE_NAME}:${VERSION}-${SHORT_SHA}" > image.env
+
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          git commit -am "update frontend image ${VERSION}-${SHORT_SHA}"
+          git push

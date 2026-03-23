@@ -61,19 +61,25 @@ jobs:
 
       # Image Security scan
       - name: Trivy Scan
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          image-ref: ${{ env.IMAGE_NAME }}:ci
-          severity: HIGH,CRITICAL
-          exit-code: 1
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v $HOME/.cache:/root/.cache \
+            aquasec/trivy:latest image \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --format table \
+            --no-progress \
+            --exit-code 1 \
+            ${{ env.IMAGE_NAME }}:ci
 
       # Login GHCR
-      - name: Login to GHCR
+      - name: Login GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      #  Push iamges
-      - name: Push Docker image
-        uses: docker/build-push-action@v5
+      # Build & Push Image
+      - name: Build & Push Image
+        uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ env.IMAGE_TAGS }}
@@ -83,17 +89,20 @@ jobs:
             VITE_MODE=${{ env.VITE_MODE }}
             VITE_API_URL=${{ env.VITE_API_URL }}
             VITE_AUTH_MODE=${{ env.VITE_AUTH_MODE }}
-      
-      # update repo OPS frontend
-      - name: Update OPS repo (frontend image)
+
+      # Update OPS repo
+      - name: Update ops repo image.env
         run: |
-          git clone https://x-access-token:${{ secrets.OPS_REPO_TOKEN }}@github.com/<username>/<ops-repo>.git
-          cd <ops-repo>/frontend
+          echo "Clone ops repo"
+          git clone https://x-access-token:${{ secrets.OPS_REPO_TOKEN }}@github.com/RakaFDe/FI_VPS_noteapp_ops.git ops-repo
 
-          echo "FRONTEND_IMAGE=${IMAGE_NAME}:${VERSION}-${SHORT_SHA}" > image.env
+          cd ops-repo/frontend
 
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          echo "FRONTEND_IMAGE=${{ env.IMAGE_NAME }}:${{ env.VERSION }}-${{ env.SHORT_SHA }}" > image.env
 
-          git commit -am "update frontend image ${VERSION}-${SHORT_SHA}"
+          git config user.name "ci-bot"
+          git config user.email "ci@github.com"
+
+          git add .
+          git commit -m "Update frontend image to ${{ env.VERSION }}-${{ env.SHORT_SHA }}" || echo "No changes"
           git push

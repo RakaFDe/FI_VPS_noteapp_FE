@@ -22,6 +22,16 @@ export default function Register() {
         onSuccess: () => {
           navigate("/login");
         },
+        onError: (err: any) => {
+          const errorMap: Record<string, string> = {
+            username_already_exists: "Username already registered.",
+            username_and_password_required: "Username and password are required.",
+            invalid_credentials: "Invalid credentials.",
+          };
+
+          alert(errorMap[err?.message] || "Registration failed. Please try again.");
+          setPassword("");
+        },
       }
     );
   }
@@ -50,7 +60,7 @@ export default function Register() {
               required
             />
 
-            <Button className="w-full" type="submit" disabled={isRegistering}>
+            <Button className="w-full" type="submit" disabled={isRegistering || !username || !password}>
               {isRegistering && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}

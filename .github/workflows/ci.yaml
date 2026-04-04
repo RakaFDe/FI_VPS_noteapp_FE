@@ -96,7 +96,7 @@ jobs:
           echo "Clone ops repo"
           git clone https://x-access-token:${{ secrets.OPS_REPO_TOKEN }}@github.com/RakaFDe/FI_VPS_noteapp_ops.git ops-repo
 
-          cd ops-repo/frontend
+          cd ops-repo/frontend/k8s
 
           SHORT_SHA=${GITHUB_SHA::7}
 

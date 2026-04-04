@@ -91,18 +91,28 @@ jobs:
             VITE_AUTH_MODE=${{ env.VITE_AUTH_MODE }}
 
       # Update OPS repo
-      - name: Update ops repo image.env
+      - name: Update ops repo kustomization
         run: |
           echo "Clone ops repo"
           git clone https://x-access-token:${{ secrets.OPS_REPO_TOKEN }}@github.com/RakaFDe/FI_VPS_noteapp_ops.git ops-repo
 
           cd ops-repo/frontend
 
-          echo "FRONTEND_IMAGE=${{ env.IMAGE_NAME }}:${{ env.VERSION }}-${{ env.SHORT_SHA }}" > image.env
+          SHORT_SHA=${GITHUB_SHA::7}
+
+          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+            TAG="latest"
+          else
+            TAG="${{ env.VERSION }}-dev-${SHORT_SHA}"
+          fi
+
+          echo "Update kustomization tag -> $TAG"
+
+          sed -i "s/newTag:.*/newTag: ${TAG}/" kustomization.yaml
 
           git config user.name "ci-bot"
           git config user.email "ci@github.com"
 
-          git add .
-          git commit -m "Update frontend image to ${{ env.VERSION }}-${{ env.SHORT_SHA }}" || echo "No changes"
+          git add kustomization.yaml
+          git commit -m "Update frontend image tag to ${TAG}" || echo "No changes"
           git push

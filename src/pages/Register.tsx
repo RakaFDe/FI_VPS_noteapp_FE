@@ -31,7 +31,11 @@ export default function Register() {
       },
 
       onError: (err: any) => {
-        const message = err?.response?.data?.message || err?.message;
+        const message =
+          err?.response?.data?.message ||
+          err?.data?.message ||
+          err?.message ||
+          "unknown_error";
 
         const errorMap: Record<string, string> = {
           username_already_exists: "Username already registered.",
@@ -40,7 +44,7 @@ export default function Register() {
 
         toast({
           title: "Registration Failed",
-          description: errorMap[message] || "Something went wrong.",
+          description: errorMap[message] || message,
           variant: "destructive",
         });
 

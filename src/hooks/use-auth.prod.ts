@@ -63,11 +63,19 @@ export function useAuthProd() {
       });
     },
 
-    onError: (error: Error) => {
+    onError: (error: any) => {
+      const message = error?.message || "unknown_error";
+
+      const errorMap: Record<string, string> = {
+        user_not_found: "User not found.",
+        invalid_password: "Password is incorrect.",
+        invalid_credentials: "Invalid username or password.",
+      };
+
       toast({
         variant: "destructive",
         title: "Login failed",
-        description: error.message,
+        description: errorMap[message] || message,
       });
     },
   });
@@ -89,11 +97,18 @@ export function useAuthProd() {
       });
     },
 
-    onError: (error: Error) => {
+    onError: (error: any) => {
+      const message = error?.message || "unknown_error";
+
+      const errorMap: Record<string, string> = {
+        username_already_exists: "Username already registered.",
+        username_and_password_required: "Username and password are required.",
+      };
+
       toast({
         variant: "destructive",
         title: "Register failed",
-        description: error.message,
+        description: errorMap[message] || message,
       });
     },
   });

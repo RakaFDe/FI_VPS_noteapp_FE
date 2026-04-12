@@ -31,7 +31,11 @@ export default function Login() {
       },
 
       onError: (err: any) => {
-        const message = err?.response?.data?.message || err?.message;
+        const message =
+          err?.response?.data?.message ||
+          err?.data?.message ||
+          err?.message ||
+          "unknown_error";
 
         const errorMap: Record<string, string> = {
           user_not_found: "User not found.",
@@ -41,7 +45,7 @@ export default function Login() {
 
         toast({
           title: "Login Failed",
-          description: errorMap[message] || "Something went wrong.",
+          description: errorMap[message] || message,
           variant: "destructive",
         });
 

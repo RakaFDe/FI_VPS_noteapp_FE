@@ -18,8 +18,16 @@ export async function apiFetch<T>(
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || res.statusText);
+    let data;
+
+    try {
+      data = await res.json(); // ✅ parse JSON
+    } catch {
+      data = { message: res.statusText };
+    }
+
+    // 🔥 lempar object, bukan string
+    throw data;
   }
 
   return res.json();

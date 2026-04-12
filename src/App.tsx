@@ -4,9 +4,11 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function App() {
   return (
+    <>
     <Routes>
       {/* PUBLIC */}
       <Route path="/login" element={<Login />} />
@@ -24,6 +26,10 @@ export default function App() {
 
       <Route path="*" element={<NotFound />} />
     </Routes>
+
+    {/* 🔥 TOAST ROOT */}
+    <Toaster />
+    </>
   );
 }
 console.log("MODE:", import.meta.env.MODE);

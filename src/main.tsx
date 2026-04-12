@@ -19,7 +19,3 @@ createRoot(document.getElementById("root")!).render(
     </ThemeProvider>
   </React.StrictMode>
 );
-
-console.log("MODE:", import.meta.env.MODE);
-console.log("API:", import.meta.env.VITE_API_URL);
-console.log("AUTH MODE:", import.meta.env.VITE_AUTH_MODE);

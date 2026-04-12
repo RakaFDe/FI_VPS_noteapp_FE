@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+
 
 export default function Register() {
   const navigate = useNavigate();
@@ -16,25 +18,37 @@ export default function Register() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    register(
-      { username, password },
-      {
-        onSuccess: () => {
-          navigate("/login");
-        },
-        onError: (err: any) => {
-          const errorMap: Record<string, string> = {
-            username_already_exists: "Username already registered.",
-            username_and_password_required: "Username and password are required.",
-            invalid_credentials: "Invalid credentials.",
-          };
+  register(
+    { username, password },
+    {
+      onSuccess: () => {
+        toast({
+          title: "Success 🎉",
+          description: "Account created. Please login.",
+        });
 
-          alert(errorMap[err?.message] || "Registration failed. Please try again.");
-          setPassword("");
-        },
-      }
-    );
-  }
+        navigate("/login");
+      },
+
+      onError: (err: any) => {
+        const message = err?.response?.data?.message || err?.message;
+
+        const errorMap: Record<string, string> = {
+          username_already_exists: "Username already registered.",
+          username_and_password_required: "Username and password are required.",
+        };
+
+        toast({
+          title: "Registration Failed",
+          description: errorMap[message] || "Something went wrong.",
+          variant: "destructive",
+        });
+
+        setPassword("");
+      },
+    }
+  );
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary/30">
